@@ -15,13 +15,11 @@ export class ApiKeyStrategy extends PassportStrategy(
         prefix: '',
       },
       true,
-      (apiKey: string, done) => {
-        this.authService.validateApiKey(apiKey)
+      async (apiKey: string, done) => {
+        const isvalidApiKey = await this.authService.validateApiKey(apiKey);
+        return isvalidApiKey
           ? done(null, true)
           : done(new UnauthorizedException(), false);
-
-        //  ?   done(new UnauthorizedException(), false)
-        //   : done(null, true);
       },
     );
   }

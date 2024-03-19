@@ -29,6 +29,7 @@ async function bootstrap() {
         type: 'apiKey',
         name: 'X-API-KEY',
         in: 'header',
+        description: 'API Key for authenticaiton of registered applications',
       },
       'apiKey',
     )
