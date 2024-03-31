@@ -20,6 +20,11 @@ async function bootstrap() {
   // OpenApi Swagger Documentation
   const config = new DocumentBuilder()
     .setTitle('Organize Simple API')
+    .setContact(
+      'Soham Kelaskar',
+      'https://github.com/untrained0',
+      'sohamkelaskar@gmail.com',
+    )
     .setDescription(
       'It is an web application that helps you to organize your data effectively!',
     )

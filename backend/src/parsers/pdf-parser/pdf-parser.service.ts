@@ -1,41 +1,83 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { AxiosResponse } from 'axios';
 import Poppler from 'node-poppler';
+import {
+  PdfExtensionError,
+  PdfMagicNumberError,
+  PdfNotParsedError,
+  PdfSizeError,
+} from './exceptions/expections';
 
 @Injectable()
 export class PdfParserService {
+  constructor(
+    private configService: ConfigService,
+    private httpService: HttpService,
+  ) {}
   async parsePdf(file: Buffer) {
-    const poppler = new Poppler(process.env.POPPLER_BIN_PATH);
+    const poppler = new Poppler(this.configService.get('POPPER_BIN_PATH'));
 
-    const text = await poppler.pdfToText(file, null, {
+    const output = (await poppler.pdfToText(file, null, {
       maintainLayout: true,
       quiet: true,
-    });
+    })) as any;
 
-    if (typeof text === 'string') {
-      return this.postProcessText(text);
+    if (output instanceof Error || output.length === 0) {
+      throw new PdfNotParsedError();
     }
 
-    return text;
+    return this.postProcessText(output);
   }
 
   private postProcessText(text: string) {
-    // trim each line
-    const lines = text.split('\n').map((line) => line.trim());
+    const processedText = text
 
-    // keep only one line if multiple lines are empty
-    const lines2 = lines.filter((line, index) => {
-      if (line === '') {
-        return lines[index - 1] !== '';
-      }
-      return true;
+      .split('\n')
+      // trim each line
+
+      .map((line) => line.trim())
+      // keep only one line if multiple lines are empty
+
+      .filter((line, index, lines) => line !== '' || lines[index - 1] !== '')
+      // remove whitespace in lines if there are more than 3 spaces
+
+      .map((line) => line.replace(/\s{3,}/g, '   '))
+      .join('\n');
+
+    return processedText;
+  }
+
+  async loadPdfFromUrl(url: string) {
+    const extension = url.split('.').pop();
+    if (extension !== 'pdf') {
+      throw new PdfExtensionError();
+    }
+    const response = await this.httpService.axiosRef({
+      url,
+      method: 'GET',
+      responseType: 'arraybuffer',
     });
 
-    // remove whitespace in lines if there are more than 3 spaces
-    const lines3 = lines2.map((line) => {
-      return line.replace(/\s{3,}/g, '   ');
-    });
+    this.checkResponse(response);
 
-    const postProcessedText = lines3.join('\n');
-    return postProcessedText;
+    return Buffer.from(response.data, 'binary');
+  }
+
+  private checkResponse(response: AxiosResponse) {
+    if (
+      parseInt(response.headers['content-length'] as string, 10) >
+      5 * 1024 * 1024
+    ) {
+      throw new PdfSizeError();
+    }
+
+    const pdfMagicNumber = Buffer.from([0x25, 0x50, 0x44, 0x46]);
+    const bufferStart = response.data.subarray(0, 4);
+
+    if (!bufferStart.equals(pdfMagicNumber)) {
+      throw new PdfMagicNumberError();
+    }
   }
 }
