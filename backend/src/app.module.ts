@@ -22,7 +22,7 @@ import { OrganizedDataModule } from './organized-data/organized-data.module';
     ]),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('postgres.host'),
         port: configService.get('postgres.port'),
@@ -30,8 +30,9 @@ import { OrganizedDataModule } from './organized-data/organized-data.module';
         password: configService.get('postgres.password'),
         database: configService.get('postgres.database'),
         autoLoadEntities: true,
-        synchronize: process.env.NODE_ENV !== 'production',
+        synchronize: configService.get('nodeEnv') !== 'production',
       }),
+      inject: [ConfigService], // Inject ConfigService
     }),
     AuthModule,
     ParsersModule,

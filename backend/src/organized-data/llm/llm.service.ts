@@ -4,8 +4,8 @@ import { ChatOpenAI } from 'langchain/chat_models/openai';
 import { BaseLanguageModel } from 'langchain/dist/base_language';
 import { PromptTemplate } from 'langchain/prompts';
 import { ChainValues } from 'langchain/dist/schema';
-import { LLMChain, loadQARefineChain } from 'langchain/dist/chains';
-import { RecursiveCharacterTextSplitter } from 'langchain/dist/text_splitter';
+import { LLMChain, loadQARefineChain } from 'langchain/chains';
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 
 @Injectable()
 export class LLMService {

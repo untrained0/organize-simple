@@ -1,6 +1,6 @@
 export default () => ({
   nodeEnv: process.env.NODE_ENV,
-  postgress: {
+  postgres: {
     host: process.env.POSTGRES_HOST,
     port: parseInt(process.env.POSTGRES_PORT, 10) || 5432,
     user: process.env.POSTGRES_USER,
