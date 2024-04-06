@@ -1,28 +1,40 @@
+import { AuthForm } from "@/components/auth-form";
+import { Metadata } from "next";
 import Image from "next/image";
-import Form from "@/components/form";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Login",
+  description: "Login to your account",
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: "Next.js Prisma Postgres Auth Starter",
+  //   description: "This is a Next.js starter kit that uses Next-Auth for simple email + password login and a Postgres database to persist the data.",
+  // },
+  // metadataBase: new URL("https://nextjs-postgres-auth.vercel.app"),
+  // themeColor: "#FFF",
+}
 
 export default function LoginPage() {
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-gray-50">
-      <div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl">
-        <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center sm:px-16">
-          <Link href="/">
+    <div className="container flex h-screen w-screen items-center justify-center flex-col">
+      <div className="mx-auto flex flex-col w-full justify-center space-y-6 sm:w-[350px]">
+        <div className="flex flex-col text-center">
+          {/* <Link href="/"> */}
             <Image
               src="/logo.png"
               priority
-              alt="Logo"
-              className="h-10 w-10 rounded-full"
-              width={20}
-              height={20}
+              alt="Organise-Simple Logo"
+              className="mx-auto"
+              width={250}
+              height={50}
             />
-          </Link>
-          <h3 className="text-xl font-semibold">Sign In</h3>
-          <p className="text-sm text-gray-500">
-            Use your email and password to sign in
-          </p>
+            <h1 className="text-2xl mt-8 font-semibold tracking-light">
+              Welcome Back
+            </h1>
+          {/* </Link> */}
         </div>
-        <Form type="login" />
+        <AuthForm /> 
       </div>
     </div>
   );

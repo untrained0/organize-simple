@@ -3,7 +3,6 @@ import "@/styles/globals.css";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import AuthStatus from "@/components/auth-status";
 import { Suspense } from "react";
 
 const inter = Inter({
@@ -11,20 +10,13 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const title = "Next.js Prisma Postgres Auth Starter";
+const title = "Organize Simple";
 const description =
-  "This is a Next.js starter kit that uses Next-Auth for simple email + password login and a Postgres database to persist the data.";
+  "Organize Simple is a web application that helps you to extract organize data from a unorganized text file.";
 
 export const metadata: Metadata = {
   title,
   description,
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-  },
-  metadataBase: new URL("https://nextjs-postgres-auth.vercel.app"),
-  themeColor: "#FFF",
 };
 
 export default async function RootLayout({
@@ -36,10 +28,6 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.variable}>
         <Toaster />
-        <Suspense fallback="Loading...">
-          {/* @ts-expect-error Async Server Component */}
-          <AuthStatus />
-        </Suspense>
         {children}
       </body>
     </html>
