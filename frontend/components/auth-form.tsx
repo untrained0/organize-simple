@@ -12,7 +12,8 @@ import { buttonVariants } from "../@/components/ui/button"
 import { Icons } from "./icons"
 import { Input } from "../@/components/ui/input"
 import { signIn } from "next-auth/react"
-import toast from "react-hot-toast"
+import { toast } from "../@/components/ui/use-toast"
+import { useRouter } from "next/navigation"
 
 
 interface AuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
@@ -26,21 +27,27 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
     });
 
     const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
 
     const onSubmit = (data: FormData) => {
         setIsLoading(true);
 
-        // const signInResult = await signIn("credentials", {
-        //     username: data.username.toLowerCase(),
-        //     password: data.password,
-        //     redirect: false,
-        // });
+        const signInResult = await signIn("credentials", {
+            username: data.username.toLowerCase(),
+            password: data.password,
+            redirect: false,
+        });
 
-        // if(!signInResult?.ok){
-        //     return toast({
-        //         title: "Something went wrong"
-        //     });
-        // }
+        if(!signInResult?.ok){
+            return toast({
+                title: "Something went wrong",
+                description: "Your sign in request failed. Please try again!",
+                variant: "destructive",
+            });
+        }
+
+        router.refresh();
+        router.push("/dashboard");
     }
 
     return <div className={cn("grid gap-6", className)} {...props}>
