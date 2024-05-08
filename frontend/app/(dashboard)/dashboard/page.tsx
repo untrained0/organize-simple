@@ -1,9 +1,13 @@
+import { TopMainContent } from '@/components/top-main-content'
 import React from 'react'
 
 export default function DashboardPage() {
     return (
-        <div>
-            <h1>This is dashboard page</h1>
+        <>
+        <TopMainContent title="Dashboard" displayUploadButton />
+        <div className='m-4'>
+            <h1>Dashboard</h1> 
         </div>
+        </>
     )
 }

@@ -11,6 +11,8 @@ import { Button } from "../@/components/ui/button"
 import { buttonVariants } from "../@/components/ui/button"
 import { Icons } from "./icons"
 import { Input } from "../@/components/ui/input"
+import { signIn } from "next-auth/react"
+import toast from "react-hot-toast"
 
 
 interface AuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
@@ -26,7 +28,19 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = (data: FormData) => {
+        setIsLoading(true);
 
+        // const signInResult = await signIn("credentials", {
+        //     username: data.username.toLowerCase(),
+        //     password: data.password,
+        //     redirect: false,
+        // });
+
+        // if(!signInResult?.ok){
+        //     return toast({
+        //         title: "Something went wrong"
+        //     });
+        // }
     }
 
     return <div className={cn("grid gap-6", className)} {...props}>
