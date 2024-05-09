@@ -16,22 +16,20 @@ export function TopMainContent({
   displayUploadButton?: boolean;
   step?: number;
 }) {
-//   useEffect(() => {
-//     useStepStore.setState(() => ({
-//       current: step ?? 0,
-//       status: "active",
-//     }));
-//   }, [step]);
+  // useEffect(() => {
+  //   useStepStore.setState(() => ({
+  //     current: step ?? 0,
+  //     status: "active",
+  //   }));
+  // }, [step]);
   return (
-    // <div className="h-32 relative flex-none border-slate-200 border-b-2 flex items-end justify-center">
-    <div className="h-36 border-slate-200 border-b-2 flex items-end justify-between">
-      {/* <h1
+    <div className="h-32 relative flex-none border-slate-200 border-b-2 flex items-end justify-center">
+      <h1
         className={cn(
           step !== undefined ? "lg:text-3xl" : "lg:text-4xl",
           "hidden lg:block mb-6 ml-10 absolute left-0 bottom-0"
         )}
-      > */}
-      <h1 className="mb-4 ml-10 text-4xl">
+      >
         {title}
       </h1>
       {/* {step !== undefined && <MultiStep />} */}

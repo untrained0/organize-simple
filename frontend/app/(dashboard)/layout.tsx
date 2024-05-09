@@ -1,8 +1,10 @@
 import { BottomSection } from "@/components/bottom-section";
 import { NavItem, NavSection, NavSectionItems } from "@/components/nav-section";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -65,7 +67,8 @@ const bottomItems: NavItem[] = [
     },
 ];
 
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default async function DashboardLayout({ children }: DashboardLayoutProps) {
+    const session = await getServerSession(authOptions);
     return (
         <div className="min-h-screen flex">
             {/* SlideBarNav */}
@@ -80,7 +83,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         <NavSection className="mt-20" section={pipelines} />
                         <NavSection className="mt-10" section={organizeData} />
                         <div className="flex flex-1 flex-col gap-y-7">
-                            <BottomSection className="mt-auto" username="Soham" items={bottomItems} />
+                            <BottomSection className="mt-auto"
+                                username = {session?.user?.username ?? "Default"}
+                                items={bottomItems} />
                         </div>
                     </nav>
                 </div>
