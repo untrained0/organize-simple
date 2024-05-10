@@ -1,9 +1,14 @@
+// "use client"
+
+import DataExtractionPipeline from '@/components/data-extraction-pipeline'
+import { TopMainContent } from '@/components/top-main-content'
 import React from 'react'
 
-export default function DataExtractionUUIDPage() {
+export default function UploadPage() {
     return (
-        <div>
-            <h1>This is data extraction UUID page</h1>
-        </div>
+        <>
+        <TopMainContent title="Data Extraction" />
+        <DataExtractionPipeline />
+        </>
     )
 }

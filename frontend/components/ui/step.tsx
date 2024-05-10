@@ -11,39 +11,25 @@ export type StepType = {
 type StepProps = {
   step: StepType;
   current: number;
-//   status: string;
+  status?: string;
 };
 
-export function Step({ step, current }: StepProps) {
-//   if (current > step.number) {
-//     status = "complete";
-//   } else if (current < step.number) {
-//     status = "inactive";
-//   }
+export function Step({ step, current, status }: StepProps) {
+  if (current > step.number) {
+    status = "complete";
+  } else if (current < step.number) {
+    status = "inactive";
+  }
 
-//   let initialAnimation: boolean | string = false;
+  let initialAnimation: boolean | string = false;
 
-//   if (step.number === current - 1 && step.number !== 1) {
-//     initialAnimation = false;
-//   }
-
-    let status: "active" | "inactive" | "complete";
-
-    if(step.number === current){
-        status = "active";
-    }
-    else if (current < step.number) {
-        status = "inactive";
-    }
-    else{
-        status = "complete";
-    }
-
+  if (step.number === current - 1 && step.number !== 1) {
+    initialAnimation = false;
+  }
   return (
     <motion.div
       animate={status}
-    //   initial={initialAnimation}
-      initial={status}
+      initial={initialAnimation}
       className="relative flex flex-col items-center"
     >
       <motion.div
