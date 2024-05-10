@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import MultiSteps from "./multi-steps";
-import { Button, buttonVariants } from "../@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "./ui/button";
 
 export default function VerificationPipeline() {
     const [status, setStatus] = useState("active");

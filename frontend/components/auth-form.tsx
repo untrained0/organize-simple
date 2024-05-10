@@ -1,19 +1,19 @@
 "use client"
 
-import { authSchema } from "@/lib/validations/auth"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { Label } from "../@/components/ui/label"
-import { Button } from "../@/components/ui/button"
-import { buttonVariants } from "../@/components/ui/button"
+
 import { Icons } from "./icons"
-import { Input } from "../@/components/ui/input"
 import { signIn } from "next-auth/react"
-import { toast } from "../@/components/ui/use-toast"
 import { useRouter } from "next/navigation"
+import { Toast } from "./ui/toast"
+import { Label } from "./ui/label"
+import { Input } from "./ui/input"
+import { Button, buttonVariants } from "./ui/button"
+import { authSchema } from "@/lib/validations/auth"
 
 
 interface AuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
@@ -44,7 +44,7 @@ export function AuthForm({ className, ...props }: AuthFormProps) {
         const signInResult = settledResult.status === "fulfilled" ? settledResult.value : null;
 
         if (!signInResult?.ok) {
-            return toast({
+            return Toast({
                 title: "Something went wrong",
                 description: "Your sign in request failed. Please try again!",
                 variant: "destructive",
