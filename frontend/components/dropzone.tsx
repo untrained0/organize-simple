@@ -9,10 +9,47 @@ import { Input } from "./ui/input";
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
 
-export function Dropzone({ className }: { className?: string }) {
+export function Dropzone({ className, updateStatus, }: { className?: string; updateStatus: (status: string) => void; }) {
     const [isBulkProcessing, setBulkProcessing] = useState(false);
     const [files, setFiles] = useState<File[]>([]);
     const [rejected, setRejected] = useState<FileRejection[]>([]);
+    const [isUploading, setIsUploading] = useState(false);
+    const [hasUploadFailed, setHasUploadFailed] = useState(false);
+
+    async function uploadFile(file: File) {
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+        });
+        const data = await res.json();
+        if (res.status !== 201) {
+            throw new Error(data.message);
+        }
+        return data;
+    }
+
+    async function uploadFiles(files: File[]) {
+        setIsUploading(true);
+        setHasUploadFailed(false);
+        const results = await Promise.allSettled(
+            [
+                ...files.map(uploadFile),
+                new Promise((resolve) => setTimeout(resolve, 700)),
+            ]);
+
+        const failed = results.filter(
+            (result) => result.status === "rejected"
+        )
+        setIsUploading(false);
+
+        if (failed.length > 0) {
+            setHasUploadFailed(false);
+        } else {
+            updateStatus("complete");
+        }
+    }
 
     const onDrop = useCallback(
         (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
@@ -41,17 +78,17 @@ export function Dropzone({ className }: { className?: string }) {
     //     maxSize: 5242880, //5 MB
     //     onDrop,
     // });
-    
+
 
     return (
-        <form
+        <div
             className={cn(className, "flex flex-col items-center justify-center")}
         >
             <div className="flex items-center gap-2">
                 <Switch
                     id="bulk processing"
                     disabled
-                    onCheckChange={() => setBulkProcessing((previousState) => !previousState)}
+                    onCheckedChange={() => setBulkProcessing((previousState) => !previousState)}
                     checked={isBulkProcessing}
                 />
                 <Label htmlFor="bulk-processing">Bulk Processing</Label>
@@ -153,22 +190,22 @@ export function Dropzone({ className }: { className?: string }) {
                         </div>
                     ))}
                     <Button
-                        // disabled={isUploading}
-                        // onClick={() => uploadFiles(files)}
+                        disabled={isUploading}
+                        onClick={() => uploadFiles(files)}
                         className="mt-3 w-full"
                     >
-                        {/* {isUploading && (
+                        {isUploading && (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                        )} */}
+                        )}
                         Upload
                     </Button>
-                    {/* {hasUploadFailed && (
+                    {hasUploadFailed && (
                         <p className="mt-2 text-red-500 text-xs">
                             Some upload failed. Please try again.
                         </p>
-                    )} */}
+                    )}
                 </section>
             )}
-        </form>
+        </div>
     );
 }

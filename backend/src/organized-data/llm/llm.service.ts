@@ -16,7 +16,7 @@ export class LLMService {
     maxConcurrency: 10,
     maxRetries: 3,
     modelName: 'gpt-3.5-turbo',
-    openAIApiKey: this.configService.get<string>('openAPIKey'),
+    openAIApiKey: this.configService.get<string>('openApiKey'),
     temperature: 0,
   });
 

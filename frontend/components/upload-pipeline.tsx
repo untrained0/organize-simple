@@ -19,17 +19,22 @@ export default function UploadPipeline() {
         <div className="flex flex-col mx-4 h-2/5">
             <MultiSteps parentStep={1} parentStatus={status} />
             <div className="flex flex-col mx-4 h-2/5">
-                <Dropzone className="mt-4 mb-8"/>
+                {status === "active" && (
+                    <Dropzone updateStatus={setStatus} className="mt-4 mb-8" />
+                )}
+                {status === "complete" && (
+                    <Link
+                        className={cn(buttonVariants(), "mb-4 mx-4")}
+                        href={"/text-recognition/1"}
+                    >
+                        Continue
+                    </Link>
+                )}
             </div>
             {/* <Button onClick={() => setStatus("complete")}>
                 Process End
-            </Button>
-            <Link
-                className={cn(buttonVariants(), "mb-4 mx-4")}
-                href={"/text-recognition/1"}
-            >
-                Continue
-            </Link> */}
+            </Button> */}
+
         </div>
     )
 }
