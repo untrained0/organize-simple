@@ -21,7 +21,7 @@ export default function UploadPipeline() {
     return (
         <div className="flex flex-col mx-4 h-2/5">
             <MultiSteps parentStep={1} parentStatus={status} />
-            <div className="flex flex-col mx-4 h-2/5">
+            <div className="flex flex-col flex-1 items-center justify-center">
                 {status === "active" && (
                     <Dropzone
                         updateStatus={setStatus}
@@ -40,6 +40,7 @@ export default function UploadPipeline() {
                             uploaded successfully {uploadInfos?.success[0]}
                             {uploadInfos?.nbFiles > 1 && " and will be processed shortly"}
                         </p>
+                        
                         {(uploadInfos?.nbFiles === 1 && (
                             <div className="flex gap-4">
                                 <Link
@@ -57,6 +58,7 @@ export default function UploadPipeline() {
                                 >
                                     Continue
                                 </Link>
+                                
                             </div>
                         )) || (
                                 <Link

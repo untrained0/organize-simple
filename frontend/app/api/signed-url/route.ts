@@ -58,6 +58,7 @@ export async function GET(req: Request) {
   });
 
   const url = await getSignedUrl(s3, command, { expiresIn: 60 });
+  console.log(url);
   return NextResponse.json(
     {
       uuid: extraction.id,
@@ -68,4 +69,7 @@ export async function GET(req: Request) {
       status: 200,
     }
   );
+
+  
 }
+

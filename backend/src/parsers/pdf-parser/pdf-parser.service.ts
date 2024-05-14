@@ -16,6 +16,7 @@ export class PdfParserService {
     private configService: ConfigService,
     private httpService: HttpService,
   ) {}
+
   async parsePdf(file: Buffer) {
     const poppler = new Poppler(this.configService.get('POPPER_BIN_PATH'));
 
@@ -33,16 +34,12 @@ export class PdfParserService {
 
   private postProcessText(text: string) {
     const processedText = text
-
       .split('\n')
       // trim each line
-
       .map((line) => line.trim())
       // keep only one line if multiple lines are empty
-
       .filter((line, index, lines) => line !== '' || lines[index - 1] !== '')
       // remove whitespace in lines if there are more than 3 spaces
-
       .map((line) => line.replace(/\s{3,}/g, '   '))
       .join('\n');
 
@@ -50,10 +47,6 @@ export class PdfParserService {
   }
 
   async loadPdfFromUrl(url: string) {
-    const extension = url.split('.').pop();
-    if (extension !== 'pdf') {
-      throw new PdfExtensionError();
-    }
     const response = await this.httpService.axiosRef({
       url,
       method: 'GET',
@@ -66,6 +59,11 @@ export class PdfParserService {
   }
 
   private checkResponse(response: AxiosResponse) {
+    // Check content type instead of file extension
+    if (response.headers['content-type'] !== 'application/pdf') {
+      throw new PdfExtensionError();
+    }
+
     if (
       parseInt(response.headers['content-length'] as string, 10) >
       5 * 1024 * 1024

@@ -58,6 +58,9 @@ export async function POST(req: Request) {
       expiresIn: 3600,
     });
 
+    // console.log(signedUrl);
+    
+
     const res = await fetch(signedUrl, {
       method: "PUT",
       body: buffer,

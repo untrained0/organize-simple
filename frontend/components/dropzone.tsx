@@ -24,7 +24,7 @@ type SettledResult = {
 export function Dropzone({ className, updateStatus, updateUploadInfos }: {
     className?: string; updateStatus: (status: string) => void; updateUploadInfos: (uploadInfos: UploadInfo) => void;
 }) {
-    const [isBulkProcessing, setBulkProcessing] = useState(false);
+    const [isBulkProcessing, setBulkProcessing] = useState(true);
     const [files, setFiles] = useState<File[]>([]);
     const [rejected, setRejected] = useState<FileRejection[]>([]);
     const [isUploading, setIsUploading] = useState(false);
