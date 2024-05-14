@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import prisma from "@/lib/prisma";
 
-export async function POST(req) {
+export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -31,15 +31,15 @@ export async function POST(req) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    const blob = file;
+    const blob = file as any;
     const buffer = Buffer.from(await blob.arrayBuffer());
 
     const s3 = new S3Client({
       region: process.env.S3_REGION,
       endpoint: process.env.S3_ENDPOINT,
       credentials: {
-        accessKeyId: process.env.S3_ACCESS_KEY_ID,
-        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+        accessKeyId: process.env.S3_ACCESS_KEY_ID as string,
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY as string,
       },
       forcePathStyle: true,
     });
@@ -48,7 +48,7 @@ export async function POST(req) {
     const fileUUID = randomUUID();
 
     const s3Params = {
-      Bucket: process.env.S3_BUCKET,
+      Bucket: process.env.S3_BUCKET as string,
       Key: `${userUUID}/${fileUUID}`,
       Body: buffer,
       ContentType: blob.type,
@@ -75,7 +75,7 @@ export async function POST(req) {
       );
     }
 
-    const extraction = await prisma.extraction.create({
+    const extraction = await prisma?.extraction.create({
       data: {
         filename: blob.name,
         objectPath: s3Params.Key,
